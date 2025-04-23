@@ -29,7 +29,6 @@ def main(
     samples_per_task=100,
     num_episodes=20,
     frame_gap=50,
-    max_frame=71,
     tasks={},
     metadata_filename="metadata.json"
 ):
@@ -51,7 +50,15 @@ def main(
     for task_folder, prompt in tasks.items():
         for _ in range(samples_per_task):
             ep = random.randint(0, num_episodes - 1)
-            frame_id = random.randint(0, max_frame - frame_gap)
+            
+            episode_files = list((base_path / task_folder / f"episode{ep}").glob("*.pkl"))
+            max_frame_id = max([int(f.stem) for f in episode_files if f.stem.isdigit()], default=-1)
+
+            if max_frame_id < frame_gap:
+                continue  # Skip this episode if it's too short
+
+            frame_id = random.randint(0, max_frame_id - frame_gap)
+
             cam = random.choice(camera_views)
 
             ep_path = base_path / task_folder / f"episode{ep}"
@@ -88,6 +95,10 @@ def main(
 
     # Write JSON metadata
     metadata_path = Path(__file__).parent / metadata_filename
+    if metadata_path.exists():
+        print(f"🧹 Clearing existing metadata file: {metadata_path}")
+        metadata_path.unlink() 
+        
     with open(metadata_path, "w") as f:
         json.dump(metadata, f, indent=2)
 
@@ -103,7 +114,6 @@ if __name__ == "__main__":
     parser.add_argument("--samples_per_task", type=int, default=100, help="Number of samples per task")
     parser.add_argument("--num_episodes", type=int, default=20, help="Number of episodes in each task")
     parser.add_argument("--frame_gap", type=int, default=50, help="Frame gap between source and target")
-    parser.add_argument("--max_frame", type=int, default=71, help="Maximum frame index in episodes")
     parser.add_argument("--tasks", nargs="+", required=True, help='Tasks in format: folder="prompt"')
     parser.add_argument("--metadata_filename", type=str, default="metadata.json", help="Filename for the output JSON metadata file")
 
@@ -117,7 +127,6 @@ if __name__ == "__main__":
         samples_per_task=args.samples_per_task,
         num_episodes=args.num_episodes,
         frame_gap=args.frame_gap,
-        max_frame=args.max_frame,
         tasks=tasks,
         metadata_filename=args.metadata_filename
     )
