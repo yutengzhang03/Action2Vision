@@ -1,6 +1,6 @@
 # InstructPix2Pix Fine-tuning on Custom Robotic Dataset
 
-This project demonstrates how to convert simulation data (`.pkl` files) of robotic manipulation tasks into a training dataset and fine-tune the [`InstructPix2Pix`](https://github.com/timothybrooks/instruct-pix2pix) model using [Hugging Face Accelerate](https://github.com/huggingface/accelerate).
+This project demonstrates how to convert simulation data (`.pkl` files) of robotic manipulation tasks into a training dataset and fine-tune the [`InstructPix2Pix`](https://github.com/timothybrooks/instruct-pix2pix) model using [`Hugging Face Accelerate`](https://github.com/huggingface/accelerate).
 
 It is designed to work with camera-based robotic demonstrations and tasks such as block hammering, handover, and stacking.
 
@@ -10,8 +10,8 @@ It is designed to work with camera-based robotic demonstrations and tasks such a
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
-cd YOUR_REPO_NAME
+git clone https://github.com/yutengzhang03/ip2p-finetune.git
+cd ip2p-finetune
 ```
 
 ### 2. Install Dependencies
