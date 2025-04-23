@@ -30,8 +30,20 @@ accelerate config
 ```
 
 ## Step 1: Create a Dataset from .pkl Files
-Put your raw .pkl simulation data in the original_data/ folder. Then run:
+Put your raw .pkl simulation data in the original_data/ folder. 
+### 📂 Dataset Structure 
 
+```
+original_data./
+  ├── block_hammer_beat_sf50_D435_pkl/
+    ├── episode0/....pkl
+    ├── episode1/....pkl
+    ├── ......
+  ├── block_handover_sf50_D435_pkl/...
+  ├── blocks_stack_easy_sf50_D435_pkl/...
+```
+
+Then run:
 ```bash
 accelerate launch create_ip2p_dataset.py \
   --samples_per_task 100 \
