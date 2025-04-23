@@ -6,9 +6,7 @@ It is designed to work with camera-based robotic demonstrations and tasks such a
 
 ---
 
-## 📂 Project Structure
-
-. ├── create_ip2p_dataset.py # Converts .pkl simulation logs to InstructPix2Pix-compatible dataset ├── train-instruct-ip2p.py # Training script using Hugging Face Accelerate ├── original_data/ # Input simulation data (.pkl files with episodes and camera views) ├── data/ # Output dataset (auto-generated) ├── train_dataset.json # JSON metadata file linking prompts to image pairs ├── requirements.txt # Python dependencies
+## 📂 Project Structure ``` . ├── create_ip2p_dataset.py # Convert .pkl logs to image-prompt training dataset ├── train-instruct-ip2p.py # Training script using Hugging Face Accelerate ├── original_data/ # Input simulation logs (.pkl) organized by episode ├── data/ # Auto-generated output dataset (images) ├── train_dataset.json # Metadata: prompt ↔ source/target image mapping ├── requirements.txt # Python dependencies ```
 
 
 ---
