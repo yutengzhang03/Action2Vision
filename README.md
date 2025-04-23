@@ -4,21 +4,6 @@ This project demonstrates how to convert simulation data (`.pkl` files) of robot
 
 It is designed to work with camera-based robotic demonstrations and tasks such as block hammering, handover, and stacking.
 
----
-
-## 📂 Project Structure 
-
-```
-. ├── create_ip2p_dataset.py # Convert .pkl logs to image-prompt training dataset 
-  ├── train-instruct-ip2p.py # Training script using Hugging Face Accelerate 
-  ├── original_data/ # Input simulation logs (.pkl) organized by episode 
-  ├── data/ # Auto-generated output dataset (images) 
-  ├── train_dataset.json # Metadata: prompt ↔ source/target image mapping 
-  ├── requirements.txt # Python dependencies
-```
-
-
----
 
 ## 🚀 Getting Started
 
@@ -72,6 +57,17 @@ A train_dataset.json file describing each pair and prompt.
   "edited_image": "data/0000/target.jpg",
   "prompt": "Beat the block with the hammer"
 }
+
+## 📂 Project Structure 
+
+```
+. ├── create_ip2p_dataset.py # Convert .pkl logs to image-prompt training dataset 
+  ├── train-instruct-ip2p.py # Training script using Hugging Face Accelerate 
+  ├── original_data/ # Input simulation logs (.pkl) organized by episode 
+  ├── data/ # Auto-generated output dataset (images) 
+  ├── train_dataset.json # Metadata: prompt ↔ source/target image mapping 
+  ├── requirements.txt # Python dependencies
+```
 
 ## Step 2: Fine-Tune InstructPix2Pix
 
