@@ -37,11 +37,11 @@ accelerate launch create_ip2p_dataset.py \
   --samples_per_task 100 \
   --frame_gap 50 \
   --save_path data \
-  --metadata_filename train_dataset.json \
   --tasks \
-  block_hammer_beat_sf50_D435_pkl="Beat the block with the hammer" \
-  block_handover_sf50_D435_pkl="Hand over the block from one gripper to another" \
-  blocks_stack_easy_sf50_D435_pkl="Stack the block on top of another block"
+  block_hammer_beat_sf50_D435_pkl="beat the block with the hammer" \
+  block_handover_sf50_D435_pkl="handover the blocks" \
+  blocks_stack_easy_sf50_D435_pkl="stack blocks" \
+  --metadata_filename train_dataset.json
 ```
 
 This will create:
@@ -74,7 +74,7 @@ A train_dataset.json file describing each pair and prompt.
 After preparing the dataset, you can fine-tune the model using:
 
 ```bash
-accelerate launch train-instruct-ip2p.py \
+accelerate launch fine-tune-ip2p.py \
   --pretrained_model_name_or_path="timbrooks/instruct-pix2pix" \
   --train_data_dir="train_dataset.json" \
   --resolution=256 \
@@ -87,7 +87,7 @@ accelerate launch train-instruct-ip2p.py \
   --lr_scheduler="constant" \
   --lr_warmup_steps=0 \
   --mixed_precision="fp16" \
-  --output_dir="./ip2p-lora-output" \
+  --output_dir="./ip2p-finetune-output" \
   --seed=42 \
   --original_image_column="image" \
   --edited_image_column="edited_image" \
