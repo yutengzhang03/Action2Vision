@@ -94,4 +94,26 @@ accelerate launch fine-tune-ip2p.py \
   --edit_prompt_column="prompt"
 ```
 
+## Step 3: Perpare Validation Dataset
+Run:
+```bash
+accelerate launch create_ip2p_dataset.py \
+  --samples_per_task 20 \
+  --frame_gap 50 \
+  --save_path val_data \
+  --tasks \
+  block_hammer_beat_sf50_D435_pkl="beat the block with the hammer" \
+  block_handover_sf50_D435_pkl="handover the blocks" \
+  blocks_stack_easy_sf50_D435_pkl="stack blocks" \
+  --metadata_filename val_dataset.json
+```
+
+## Step 4: Evaluate the Model
+
+Evaluate using the SSIM (Structural Similarity Index) and PSNR (Peak Signal-to-Noise Ratio) metrics
+
+Run:
+```bash
+python evaluate_metrics.py --val_json val_dataset.json
+```
 
