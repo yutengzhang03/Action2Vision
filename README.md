@@ -69,6 +69,31 @@ data/0000/source.jpg, data/0000/target.jpg, ...
 
 A train_dataset.json file describing each pair and prompt.
 
+#### You can change the "--samples_per_task" and "--metadata_filename" to create the valiadation dataset and test dataset.
+For example:
+```bash
+accelerate launch create_ip2p_dataset.py \
+  --samples_per_task 20 \
+  --frame_gap 50 \
+  --save_path data \
+  --tasks \
+  block_hammer_beat_sf50_D435_pkl="beat the block with the hammer" \
+  block_handover_sf50_D435_pkl="handover the blocks" \
+  blocks_stack_easy_sf50_D435_pkl="stack blocks" \
+  --metadata_filename val_dataset.json
+```
+```bash
+accelerate launch create_ip2p_dataset.py \
+  --samples_per_task 20 \
+  --frame_gap 50 \
+  --save_path data \
+  --tasks \
+  block_hammer_beat_sf50_D435_pkl="beat the block with the hammer" \
+  block_handover_sf50_D435_pkl="handover the blocks" \
+  blocks_stack_easy_sf50_D435_pkl="stack blocks" \
+  --metadata_filename test_dataset.json
+```
+
 ### Example train_dataset.json entry:
 
 {
