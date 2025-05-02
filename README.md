@@ -109,7 +109,9 @@ accelerate launch create_ip2p_dataset.py \
   ├── train-instruct-ip2p.py # Training script using Hugging Face Accelerate 
   ├── original_data/ # Input simulation logs (.pkl) organized by episode 
   ├── data/ # Auto-generated output dataset (images) 
-  ├── train_dataset.json # Metadata: prompt ↔ source/target image mapping 
+  ├── train_dataset.json # Metadata: prompt ↔ source/target image mapping
+  ├── val_dataset.json
+  ├── test_dataset.json 
   ├── requirements.txt # Python dependencies
 ```
 
