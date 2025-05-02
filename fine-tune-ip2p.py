@@ -159,6 +159,12 @@ def parse_args():
         ),
     )
     parser.add_argument(
+        '--validation_data_dir', 
+        type=str, 
+        default=None, 
+        help="A folder containing the validation data")
+
+    parser.add_argument(
         "--original_image_column",
         type=str,
         default="input_image",
@@ -654,6 +660,11 @@ def main():
                 data_files={"train": args.train_data_dir},
                 split="train",
                 cache_dir=args.cache_dir,)
+        val_dataset = None
+        if args.validation_data_dir is not None:
+            val_dataset = load_dataset(
+                "json", data_files={"validation": args.validation_data_dir}, split="validation"
+            )
         # dataset = load_dataset(
         #     "imagefolder",
         #     data_files=data_files,
@@ -772,6 +783,16 @@ def main():
         batch_size=args.train_batch_size,
         num_workers=args.dataloader_num_workers,
     )
+    val_dataloader = None
+    if val_dataset is not None:
+        val_dataset.set_transform(preprocess_train) 
+        val_dataloader = torch.utils.data.DataLoader(
+            val_dataset,
+            batch_size=args.train_batch_size,
+            shuffle=False,
+            num_workers=args.dataloader_num_workers,
+        )
+
 
     # Scheduler and math around the number of training steps.
     # Check the PR https://github.com/huggingface/diffusers/pull/8312 for detailed explanation.
@@ -842,6 +863,9 @@ def main():
     logger.info(f"  Total optimization steps = {args.max_train_steps}")
     global_step = 0
     first_epoch = 0
+    train_loss_list = []
+    val_loss_list = []
+
 
     # Potentially load in the weights and states from a previous save
     if args.resume_from_checkpoint:
@@ -947,6 +971,7 @@ def main():
                 avg_loss = accelerator.gather(loss.repeat(args.train_batch_size)).mean()
                 train_loss += avg_loss.item() / args.gradient_accumulation_steps
 
+
                 # Backpropagate
                 accelerator.backward(loss)
                 if accelerator.sync_gradients:
@@ -962,6 +987,7 @@ def main():
                 progress_bar.update(1)
                 global_step += 1
                 accelerator.log({"train_loss": train_loss}, step=global_step)
+                train_loss1 = train_loss                    
                 train_loss = 0.0
 
                 if global_step % args.checkpointing_steps == 0:
@@ -995,6 +1021,44 @@ def main():
 
             if global_step >= args.max_train_steps:
                 break
+        # --- Run validation loss evaluation ---
+        if val_dataloader is not None:
+            unet.eval()
+            val_loss_accum = 0.0
+            val_steps = 0
+
+            for val_batch in val_dataloader:
+                with torch.no_grad():
+                    latents = vae.encode(val_batch["edited_pixel_values"].to(accelerator.device, dtype=weight_dtype)).latent_dist.sample()
+                    latents = latents * vae.config.scaling_factor
+                    noise = torch.randn_like(latents)
+                    bsz = latents.shape[0]
+                    timesteps = torch.randint(0, noise_scheduler.config.num_train_timesteps, (bsz,), device=latents.device)
+                    timesteps = timesteps.long()
+
+                    noisy_latents = noise_scheduler.add_noise(latents, noise, timesteps)
+                    encoder_hidden_states = text_encoder(val_batch["input_ids"].to(accelerator.device))[0]
+                    original_image_embeds = vae.encode(val_batch["original_pixel_values"].to(accelerator.device, dtype=weight_dtype)).latent_dist.mode()
+                    concatenated_noisy_latents = torch.cat([noisy_latents, original_image_embeds], dim=1)
+
+                    if noise_scheduler.config.prediction_type == "epsilon":
+                        target = noise
+                    elif noise_scheduler.config.prediction_type == "v_prediction":
+                        target = noise_scheduler.get_velocity(latents, noise, timesteps)
+                    else:
+                        raise ValueError(f"Unknown prediction type {noise_scheduler.config.prediction_type}")
+
+                    model_pred = unet(concatenated_noisy_latents, timesteps, encoder_hidden_states, return_dict=False)[0]
+                    val_loss = F.mse_loss(model_pred.float(), target.float(), reduction="mean")
+
+                    val_loss_accum += accelerator.gather(val_loss.repeat(args.train_batch_size)).mean().item()
+                    val_steps += 1
+        train_loss_list.append(train_loss1)
+        logger.info(f"Train Loss (Epoch {epoch+1}): {train_loss1:.4f}")
+        if val_dataloader is not None:
+            avg_val_loss = val_loss_accum / val_steps
+            val_loss_list.append(avg_val_loss)
+            logger.info(f"Validation Loss (Epoch {epoch+1}): {avg_val_loss:.4f}")
 
         if accelerator.is_main_process:
             if (
@@ -1033,6 +1097,21 @@ def main():
 
     # Create the pipeline using the trained modules and save it.
     accelerator.wait_for_everyone()
+    if accelerator.is_main_process:
+        import matplotlib.pyplot as plt
+
+        plt.figure()
+        plt.plot(train_loss_list, label="Train Loss")
+        if val_loss_list:
+            plt.plot(val_loss_list, label="Val Loss")
+        plt.xlabel("Epoch")
+        plt.ylabel("Loss")
+        plt.title("Training and Validation Loss")
+        plt.legend()
+        plt.grid(True)
+        plt.savefig(os.path.join(args.output_dir, "loss_curve.png"))
+        plt.close()
+
     if accelerator.is_main_process:
         if args.use_ema:
             ema_unet.copy_to(unet.parameters())
