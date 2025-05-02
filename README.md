@@ -143,7 +143,6 @@ accelerate launch fine-tune-ip2p.py \
 The model and a training and validation loss plot will be saved at "--output_dir".
 
 If you don't have a validation dataset, delete "  --validation_data_dir="val_dataset.json" \"
-```
 
 ## Step 3: Evaluate the Model
 
