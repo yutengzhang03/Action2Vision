@@ -150,20 +150,25 @@ If you don't have a validation dataset, delete `--validation_data_dir="val_datas
 for running distributed training with `accelerate`. Here is an example command:
 
 ```bash
-accelerate launch --mixed_precision="fp16" --multi_gpu train_instruct_pix2pix.py \
- --pretrained_model_name_or_path=stable-diffusion-v1-5/stable-diffusion-v1-5 \
- --dataset_name=sayakpaul/instructpix2pix-1000-samples \
- --use_ema \
- --enable_xformers_memory_efficient_attention \
- --resolution=512 --random_flip \
- --train_batch_size=4 --gradient_accumulation_steps=4 --gradient_checkpointing \
- --max_train_steps=15000 \
- --checkpointing_steps=5000 --checkpoints_total_limit=1 \
- --learning_rate=5e-05 --lr_warmup_steps=0 \
- --conditioning_dropout_prob=0.05 \
- --mixed_precision=fp16 \
- --seed=42 \
- --push_to_hub
+accelerate launch fine-tune-ip2p.py \ --multi_gpu
+  --pretrained_model_name_or_path="timbrooks/instruct-pix2pix" \
+  --train_data_dir="train_dataset.json" \
+  --validation_data_dir="val_dataset.json" \
+  --resolution=256 \
+  --random_flip \
+  --train_batch_size=4 \
+  --gradient_accumulation_steps=4 \
+  --num_train_epochs=10 \
+  --checkpointing_steps=500 \
+  --learning_rate=1e-5 \
+  --lr_scheduler="constant" \
+  --lr_warmup_steps=0 \
+  --mixed_precision="fp16" \
+  --output_dir="./ip2p-finetune-output" \
+  --seed=42 \
+  --original_image_column="image" \
+  --edited_image_column="edited_image" \
+  --edit_prompt_column="prompt"
 ```
 
 ## Step 3: Evaluate the Model
@@ -175,3 +180,26 @@ Run:
 python evaluate_metrics.py --test_data_dir test_dataset.json
 ```
 
+## Global fine-tuning
+We also provide methods for global fine-tuning. 
+Though not recommended for this task, you can try on other projects.
+```bash
+accelerate launch fine-tune-ip2p-global.py \
+  --pretrained_model_name_or_path="timbrooks/instruct-pix2pix" \
+  --train_data_dir="train_dataset.json" \
+  --validation_data_dir="val_dataset.json" \
+  --resolution=256 \
+  --random_flip \
+  --train_batch_size=4 \
+  --gradient_accumulation_steps=4 \
+  --num_train_epochs=10 \
+  --checkpointing_steps=500 \
+  --learning_rate=1e-5 \
+  --lr_scheduler="constant" \
+  --lr_warmup_steps=0 \
+  --output_dir="./ip2p-finetune-output" \
+  --seed=42 \
+  --original_image_column="image" \
+  --edited_image_column="edited_image" \
+  --edit_prompt_column="prompt"
+```
