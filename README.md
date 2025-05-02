@@ -1,4 +1,4 @@
-# InstructPix2Pix Fine-tuning on Custom Robotic Dataset
+# InstructPix2Pix Fine-tuning for Robotic Action Frame Prediction
 
 This project demonstrates how to convert simulation data (`.pkl` files) of robotic manipulation tasks into a training dataset and fine-tune the [`InstructPix2Pix`](https://github.com/timothybrooks/instruct-pix2pix) model using [`Hugging Face Accelerate`](https://github.com/huggingface/accelerate).
 
@@ -62,7 +62,7 @@ accelerate launch create_ip2p_dataset.py \
   blocks_stack_easy_sf50_D435_pkl="stack blocks" \
   --metadata_filename train_dataset.json
 ```
-
+"--metadata_filename" followed by the output path
 This will create:
 
 data/0000/source.jpg, data/0000/target.jpg, ...
