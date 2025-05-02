@@ -123,6 +123,7 @@ After preparing the dataset, you can fine-tune the model using:
 accelerate launch fine-tune-ip2p.py \
   --pretrained_model_name_or_path="timbrooks/instruct-pix2pix" \
   --train_data_dir="train_dataset.json" \
+  --validation_data_dir="val_dataset.json" \
   --resolution=256 \
   --random_flip \
   --train_batch_size=4 \
@@ -139,27 +140,17 @@ accelerate launch fine-tune-ip2p.py \
   --edited_image_column="edited_image" \
   --edit_prompt_column="prompt"
 ```
+The model and a training and validation loss plot will be saved at "--output_dir".
 
-## Step 3: Perpare Validation Dataset
-Run:
-```bash
-accelerate launch create_ip2p_dataset.py \
-  --samples_per_task 20 \
-  --frame_gap 50 \
-  --save_path val_data \
-  --tasks \
-  block_hammer_beat_sf50_D435_pkl="beat the block with the hammer" \
-  block_handover_sf50_D435_pkl="handover the blocks" \
-  blocks_stack_easy_sf50_D435_pkl="stack blocks" \
-  --metadata_filename val_dataset.json
+If you don't have a validation dataset, delete "  --validation_data_dir="val_dataset.json" \"
 ```
 
-## Step 4: Evaluate the Model
+## Step 3: Evaluate the Model
 
 Evaluate using the SSIM (Structural Similarity Index) and PSNR (Peak Signal-to-Noise Ratio) metrics
 
 Run:
 ```bash
-python evaluate_metrics.py --val_json val_dataset.json
+python evaluate_metrics.py --test_json val_dataset.json
 ```
 
