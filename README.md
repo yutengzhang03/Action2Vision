@@ -151,6 +151,6 @@ Evaluate using the SSIM (Structural Similarity Index) and PSNR (Peak Signal-to-N
 
 Run:
 ```bash
-python evaluate_metrics.py --test_json val_dataset.json
+python evaluate_metrics.py --test_data_dir test_dataset.json
 ```
 
