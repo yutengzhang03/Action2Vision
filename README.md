@@ -62,7 +62,7 @@ accelerate launch create_ip2p_dataset.py \
   blocks_stack_easy_sf50_D435_pkl="stack blocks" \
   --metadata_filename train_dataset.json
 ```
-"--metadata_filename" followed by the output path
+`--metadata_filename` followed by the output path
 This will create:
 
 data/0000/source.jpg, data/0000/target.jpg, ...
@@ -77,7 +77,7 @@ A train_dataset.json file describing each pair and prompt.
   "prompt": "Beat the block with the hammer"
 }
 
-#### You can change the "--samples_per_task" and "--metadata_filename" to create the valiadation dataset and test dataset.
+#### You can change the `--samples_per_task` and `--metadata_filename` to create the valiadation dataset and test dataset.
 For example:
 ```bash
 accelerate launch create_ip2p_dataset.py \
@@ -140,9 +140,31 @@ accelerate launch fine-tune-ip2p.py \
   --edited_image_column="edited_image" \
   --edit_prompt_column="prompt"
 ```
-The model and a training and validation loss plot will be saved at "--output_dir".
+The model and a training and validation loss plot will be saved at `--output_dir`.
 
-If you don't have a validation dataset, delete "  --validation_data_dir="val_dataset.json" \"
+If you don't have a validation dataset, delete `--validation_data_dir="val_dataset.json" \`
+
+### Training with multiple GPUs
+
+`accelerate` allows for seamless multi-GPU training. Follow the instructions [here](https://huggingface.co/docs/accelerate/basic_tutorials/launch)
+for running distributed training with `accelerate`. Here is an example command:
+
+```bash
+accelerate launch --mixed_precision="fp16" --multi_gpu train_instruct_pix2pix.py \
+ --pretrained_model_name_or_path=stable-diffusion-v1-5/stable-diffusion-v1-5 \
+ --dataset_name=sayakpaul/instructpix2pix-1000-samples \
+ --use_ema \
+ --enable_xformers_memory_efficient_attention \
+ --resolution=512 --random_flip \
+ --train_batch_size=4 --gradient_accumulation_steps=4 --gradient_checkpointing \
+ --max_train_steps=15000 \
+ --checkpointing_steps=5000 --checkpoints_total_limit=1 \
+ --learning_rate=5e-05 --lr_warmup_steps=0 \
+ --conditioning_dropout_prob=0.05 \
+ --mixed_precision=fp16 \
+ --seed=42 \
+ --push_to_hub
+```
 
 ## Step 3: Evaluate the Model
 
