@@ -1,20 +1,28 @@
-# InstructPix2Pix Fine-tuning for Robotic Action Frame Prediction
+# **InstructPix2Pix Fine-tuning for Robotic Action Frame Prediction**
 
 This project demonstrates how to convert simulation data (`.pkl` files) of robotic manipulation tasks into a training dataset and fine-tune the [`InstructPix2Pix`](https://github.com/timothybrooks/instruct-pix2pix) model using [`Hugging Face Accelerate`](https://github.com/huggingface/accelerate).
 
 It is designed to work with camera-based robotic demonstrations and tasks such as block hammering, handover, and stacking.
 
+## **🖥️ Hardware and Environment Requirements**
 
-## 🚀 Getting Started
+- **GPU:** A GPU with **at least 20 GB of VRAM** is required to successfully run this model.
+- **CUDA version:** 12.2 (recommended)
+- **Operating system:** Ubuntu 22.04
+- **Python version:** 3.10 (used in conda environment)
 
-### 1. Clone the Repository
+
+## **🚀 Getting Started**
+
+### Clone the Repository
 
 ```bash
 git clone https://github.com/yutengzhang03/ip2p-finetune.git
 cd ip2p-finetune
 ```
 
-### 2. Install Dependencies
+### Install Dependencies
+
 We recommend using a virtual environment:
 
 ```bash
@@ -24,14 +32,41 @@ conda activate ip2p
 pip install -r requirements.txt
 ```
 
-#### If you haven’t used accelerate before, configure it with:
+### Configure Accelerate (if you haven’t already)
+
 ```bash
 accelerate config
 ```
 
-## Step 1: Create a Dataset from .pkl Files
-Put your raw .pkl simulation data in the original_data/ folder. 
-### 📂 Dataset Structure 
+Here is a sample configuration for a single-GPU setup:
+
+```bash
+compute_environment: LOCAL_MACHINE
+debug: false
+distributed_type: 'NO'
+downcast_bf16: 'no'
+enable_cpu_affinity: false
+gpu_ids: '0'
+machine_rank: 0
+main_training_function: main
+mixed_precision: 'no'
+num_machines: 1
+num_processes: 1
+rdzv_backend: static
+same_network: true
+tpu_env: []
+tpu_use_cluster: false
+tpu_use_sudo: false
+use_cpu: false
+```
+
+## Dataset Preparation
+
+### Step 1: Create a Dataset from .pkl Files
+
+Put your raw `.pkl` simulation data in the `original_data/` folder. 
+
+#### 📂 Dataset Structure 
 
 <pre>
 📁 original_data/
@@ -49,8 +84,10 @@ Put your raw .pkl simulation data in the original_data/ folder.
   │ └── 📁 episode0/... 
 </pre>
 
+#### Training dataset
 
-Then run:
+Run the following commands to create the training dataset
+
 ```bash
 accelerate launch create_ip2p_dataset.py \
   --samples_per_task 100 \
@@ -62,23 +99,30 @@ accelerate launch create_ip2p_dataset.py \
   blocks_stack_easy_sf50_D435_pkl="stack blocks" \
   --metadata_filename train_dataset.json
 ```
-`--metadata_filename` followed by the output path
-This will create:
 
-data/0000/source.jpg, data/0000/target.jpg, ...
+- `--metadata_filename` followed by the output path
+  This will create:
 
-A train_dataset.json file describing each pair and prompt.
+  `data/0000/source.jpg`, `data/0000/target.jpg`, ...
 
-#### Example train_dataset.json entry:
+- A `train_dataset.json` file describing each pair and prompt.
 
+- Example entry `train_dataset.json`:
+
+```json
 {
   "image": "data/0000/source.jpg",
   "edited_image": "data/0000/target.jpg",
   "prompt": "Beat the block with the hammer"
 }
+```
 
-#### You can change the `--samples_per_task` and `--metadata_filename` to create the valiadation dataset and test dataset.
+#### Validation and Testing Dataset
+
+You can change the `--samples_per_task` and `--metadata_filename` to create the valiadation dataset and test dataset.
+
 For example:
+
 ```bash
 accelerate launch create_ip2p_dataset.py \
   --samples_per_task 20 \
@@ -90,6 +134,7 @@ accelerate launch create_ip2p_dataset.py \
   blocks_stack_easy_sf50_D435_pkl="stack blocks" \
   --metadata_filename val_dataset.json
 ```
+
 ```bash
 accelerate launch create_ip2p_dataset.py \
   --samples_per_task 20 \
@@ -115,7 +160,9 @@ accelerate launch create_ip2p_dataset.py \
   ├── requirements.txt # Python dependencies
 ```
 
-## Step 2: Fine-Tune InstructPix2Pix
+## Fine-Tune InstructPix2Pix Model
+
+### Non-distributed Training
 
 After preparing the dataset, you can fine-tune the model using:
 
@@ -140,6 +187,7 @@ accelerate launch fine-tune-ip2p.py \
   --edited_image_column="edited_image" \
   --edit_prompt_column="prompt"
 ```
+
 The model and a training and validation loss plot will be saved at `--output_dir`.
 
 If you don't have a validation dataset, delete `--validation_data_dir="val_dataset.json" \`
@@ -171,18 +219,11 @@ accelerate launch fine-tune-ip2p.py \ --multi_gpu
   --edit_prompt_column="prompt"
 ```
 
-## Step 3: Evaluate the Model
+### Global fine-tuning
 
-Evaluate using the SSIM (Structural Similarity Index) and PSNR (Peak Signal-to-Noise Ratio) metrics
-
-Run:
-```bash
-python evaluate_metrics.py --test_data_dir test_dataset.json
-```
-
-## Global fine-tuning
 We also provide methods for global fine-tuning. 
 Though not recommended for this task, you can try on other projects.
+
 ```bash
 accelerate launch fine-tune-ip2p-global.py \
   --pretrained_model_name_or_path="timbrooks/instruct-pix2pix" \
@@ -202,4 +243,14 @@ accelerate launch fine-tune-ip2p-global.py \
   --original_image_column="image" \
   --edited_image_column="edited_image" \
   --edit_prompt_column="prompt"
+```
+
+## Evaluate the Model
+
+We evaluate the model using **SSIM (Structural Similarity Index)** and **PSNR (Peak Signal-to-Noise Ratio)** metrics.
+
+To run the evaluation:
+
+```bash
+python evaluate_metrics.py --test_data_dir test_dataset.json
 ```
