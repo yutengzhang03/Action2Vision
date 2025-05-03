@@ -899,6 +899,7 @@ def main():
     for epoch in range(first_epoch, args.num_train_epochs):
         unet.train()
         train_loss = 0.0
+        train_loss1 = 0.0
         for step, batch in enumerate(train_dataloader):
             # Skip steps until we reach the resumed step
             if args.resume_from_checkpoint and epoch == first_epoch and step < resume_step:
@@ -987,7 +988,7 @@ def main():
                 progress_bar.update(1)
                 global_step += 1
                 accelerator.log({"train_loss": train_loss}, step=global_step)
-                train_loss1 = train_loss                    
+                train_loss1 += train_loss                    
                 train_loss = 0.0
 
                 if global_step % args.checkpointing_steps == 0:
@@ -1053,8 +1054,8 @@ def main():
 
                     val_loss_accum += accelerator.gather(val_loss.repeat(args.train_batch_size)).mean().item()
                     val_steps += 1
-        train_loss_list.append(train_loss1)
-        logger.info(f"Train Loss (Epoch {epoch+1}): {train_loss1:.4f}")
+        train_loss_list.append(train_loss1/len(train_dataloader))
+        logger.info(f"Train Loss (Epoch {epoch+1}): {train_loss1/len(train_dataloader):.4f}")
         if val_dataloader is not None:
             avg_val_loss = val_loss_accum / val_steps
             val_loss_list.append(avg_val_loss)
