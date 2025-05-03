@@ -60,7 +60,7 @@ tpu_use_sudo: false
 use_cpu: false
 ```
 
-## Dataset Preparation
+## 🧾 Dataset Preparation
 
 ### Step 1: Create a Dataset from .pkl Files
 
@@ -147,7 +147,7 @@ accelerate launch create_ip2p_dataset.py \
   --metadata_filename test_dataset.json
 ```
 
-## 📂 Project Structure 
+## 🗂️ Project Structure 
 
 ```
 . ├── create_ip2p_dataset.py # Convert .pkl logs to image-prompt training dataset 
@@ -160,7 +160,7 @@ accelerate launch create_ip2p_dataset.py \
   ├── requirements.txt # Python dependencies
 ```
 
-## Fine-Tune InstructPix2Pix Model
+## 🧪 Fine-Tune InstructPix2Pix Model
 
 ### Non-distributed Training
 
@@ -245,7 +245,7 @@ accelerate launch fine-tune-ip2p-global.py \
   --edit_prompt_column="prompt"
 ```
 
-## Evaluate the Model
+## 📊 Evaluate the Model
 
 We evaluate the model using **SSIM (Structural Similarity Index)** and **PSNR (Peak Signal-to-Noise Ratio)** metrics.
 
