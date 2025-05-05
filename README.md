@@ -1,4 +1,4 @@
-# **InstructPix2Pix Fine-tuning for Robotic Action Frame Prediction**
+# **Action2Vision: Forecasting Robotic Outcomes from Instructions and Observations**
 
 This project demonstrates how to fine-tune the [`InstructPix2Pix`](https://github.com/timothybrooks/instruct-pix2pix) model using [`Hugging Face Accelerate`](https://github.com/huggingface/accelerate) using simulation data of robotic manipulation tasks.
 
