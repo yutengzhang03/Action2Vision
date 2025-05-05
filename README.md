@@ -221,7 +221,7 @@ accelerate launch fine-tune-ip2p.py \ --multi_gpu
 
 ### Global fine-tuning
 
-We also provide methods for global fine-tuning. 
+We also provide methods for full fine-tuning. 
 Though not recommended for this task, you can try on other projects.
 
 ```bash
