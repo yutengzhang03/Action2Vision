@@ -288,7 +288,7 @@ accelerate launch fine-tune-ip2p.py \ --multi_gpu
   --edit_prompt_column="prompt"
 ```
 
-### Global fine-tuning
+### Full fine-tuning
 
 We also provide methods for full fine-tuning. 
 Though not recommended for this task, you can try on other projects.
