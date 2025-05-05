@@ -64,13 +64,21 @@ use_cpu: false
 
 ### Step 0: Prepare Dataset (Example: Our dataset)
 
+Login in huggingface:
+
 ```bash
 huggingface-cli login --token=<paste-your-token>
 ```
 
+Run the following commmand to download our dataset:
+
+```bash
+python download_dataset.py
+```
+
 ### Step 1: Create a Dataset from .pkl Files
 
-Put your raw `.pkl` simulation data in the `original_data/` folder. 
+Put your raw `.pkl` simulation data in the `original_data/` folder. (Our dataset is automatically saved in this folder if you follow the above steps)
 
 #### 📂 Dataset Structure 
 
