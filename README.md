@@ -4,6 +4,12 @@ This project demonstrates how to convert simulation data (`.pkl` files) of robot
 
 It is designed to work with camera-based robotic demonstrations and tasks such as block hammering, handover, and stacking.
 
+## 📷 Example Result
+
+Below is an example of source → generated → target result after fine-tuning:
+
+![Finetune Result](img/show.png)
+
 ## **🖥️ Hardware and Environment Requirements**
 
 - **GPU:** A GPU with **at least 20 GB of VRAM** is required to successfully run this model.
