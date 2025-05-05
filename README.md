@@ -7,7 +7,7 @@ It is designed to work with camera-based robotic demonstrations and tasks such a
 ## 🔗 Resources
 
 - 📂 **Dataset**  
-  Our robotic manipulation dataset is publicly available on the Hugging Face Hub:  
+  Our robotic manipulation dataset (generated via RoboTwin) is publicly available on the Hugging Face Hub:  
   👉 [https://huggingface.co/datasets/yutengz/robotic-manipulation-dataset](https://huggingface.co/datasets/yutengz/robotic-manipulation-dataset)
 
 - 🧠 **Fine-tuned Model**  
