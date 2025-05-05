@@ -8,7 +8,7 @@ It is designed to work with camera-based robotic demonstrations and tasks such a
 
 Below is an example of source → generated → target result after fine-tuning:
 
-![Finetune Result](img/show.png)
+![Finetune Result](img/show-example.png)
 
 ## **🖥️ Hardware and Environment Requirements**
 
