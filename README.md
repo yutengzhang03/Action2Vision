@@ -225,7 +225,7 @@ We also provide methods for full fine-tuning.
 Though not recommended for this task, you can try on other projects.
 
 ```bash
-accelerate launch fine-tune-ip2p-global.py \
+accelerate launch fine-tune-ip2p-full.py \
   --pretrained_model_name_or_path="timbrooks/instruct-pix2pix" \
   --train_data_dir="train_dataset.json" \
   --validation_data_dir="val_dataset.json" \
