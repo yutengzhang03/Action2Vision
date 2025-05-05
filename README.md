@@ -254,3 +254,7 @@ To run the evaluation:
 ```bash
 python evaluate_metrics.py --test_data_dir test_dataset.json
 ```
+
+#### Visualization
+To visualize the exact performance of the finetuned model, use `inference.ipynb`
+
