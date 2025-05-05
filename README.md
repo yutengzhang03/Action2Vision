@@ -164,7 +164,9 @@ accelerate launch create_ip2p_dataset.py \
 ## 🗂️ Project Structure 
 
 ```
-. ├── create_ip2p_dataset.py # Convert .pkl logs to image-prompt training dataset 
+. ├── create_ip2p_dataset.py # Convert .pkl logs to image-prompt training dataset
+  ├── download_dataset.py
+  ├── evaluate_metrics.py
   ├── train-instruct-ip2p.py # Training script using Hugging Face Accelerate 
   ├── original_data/ # Input simulation logs (.pkl) organized by episode 
   ├── data/ # Auto-generated output dataset (images) 
