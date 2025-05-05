@@ -11,8 +11,7 @@ from torchmetrics.image.psnr import PeakSignalNoiseRatio
 
 # Load pipeline
 pipe = StableDiffusionInstructPix2PixPipeline.from_pretrained(
-    # "./ip2p-finetune-output-fullset",
-    "timbrooks/instruct-pix2pix",
+    args.model_path,
     torch_dtype=torch.float16,
     safety_checker=None
 ).to("cuda")
@@ -97,6 +96,7 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--test_data_dir", type=str, default="test_dataset.json", help="Path to test_dataset.json")
+    parser.add_argument("--model_path", type=str, default="timbrooks/instruct-pix2pix", help="Path to pretrained or fine-tuned model")
     args = parser.parse_args()
 
     evaluate_from_json(args.test_data_dir)
