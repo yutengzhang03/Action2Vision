@@ -4,6 +4,21 @@ This project demonstrates how to convert simulation data (`.pkl` files) of robot
 
 It is designed to work with camera-based robotic demonstrations and tasks such as block hammering, handover, and stacking.
 
+
+
+- 📂 **Dataset**  
+  Our robotic manipulation dataset is publicly available on the Hugging Face Hub:  
+  👉 [https://huggingface.co/datasets/yutengz/robotic-manipulation-dataset](https://huggingface.co/datasets/yutengz/robotic-manipulation-dataset)
+
+- 🧠 **Fine-tuned Model**  
+  The InstructPix2Pix model fine-tuned on our dataset is hosted at:  
+  👉 [https://huggingface.co/yutengz/ip2p-RoboPredict](https://huggingface.co/yutengz/ip2p-RoboPredict)
+
+- 🚀 **Interactive Demo**  
+  You can try our model directly in your browser via Hugging Face Spaces:  
+  👉 [https://huggingface.co/spaces/yutengz/ip2p-RoboPredict](https://huggingface.co/spaces/yutengz/ip2p-RoboPredict)
+
+
 ## 📷 Example Result
 
 Below is an example of source → generated → target result after fine-tuning:
