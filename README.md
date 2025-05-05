@@ -1,6 +1,6 @@
 # **InstructPix2Pix Fine-tuning for Robotic Action Frame Prediction**
 
-This project demonstrates how to convert simulation data (`.pkl` files) of robotic manipulation tasks into a training dataset and fine-tune the [`InstructPix2Pix`](https://github.com/timothybrooks/instruct-pix2pix) model using [`Hugging Face Accelerate`](https://github.com/huggingface/accelerate).
+This project demonstrates how to fine-tune the [`InstructPix2Pix`](https://github.com/timothybrooks/instruct-pix2pix) model using [`Hugging Face Accelerate`](https://github.com/huggingface/accelerate) using simulation data of robotic manipulation tasks.
 
 It is designed to work with camera-based robotic demonstrations and tasks such as block hammering, handover, and stacking.
 
