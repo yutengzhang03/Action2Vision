@@ -227,6 +227,7 @@ accelerate launch create_ip2p_dataset.py \
 |-- train_dataset.json
 `-- val_dataset.json
 ```
+In addition to the files we provide, other files are from [InstructPix2Pix](https://github.com/timothybrooks/instruct-pix2pix).
 
 ## 🧪 Fine-Tune InstructPix2Pix Model
 
