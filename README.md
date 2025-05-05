@@ -170,16 +170,47 @@ accelerate launch create_ip2p_dataset.py \
 ## 🗂️ Project Structure 
 
 ```
-. ├── create_ip2p_dataset.py # Convert .pkl logs to image-prompt training dataset
-  ├── download_dataset.py
-  ├── evaluate_metrics.py
-  ├── train-instruct-ip2p.py # Training script using Hugging Face Accelerate 
-  ├── original_data/ # Input simulation logs (.pkl) organized by episode 
-  ├── data/ # Auto-generated output dataset (images) 
-  ├── train_dataset.json # Metadata: prompt ↔ source/target image mapping
-  ├── val_dataset.json
-  ├── test_dataset.json 
-  ├── requirements.txt # Python dependencies
+.
+|-- LICENSE
+|-- README.md
+|-- configs
+|   |-- generate.yaml
+|   `-- train.yaml
+|-- create_ip2p_dataset.py
+|-- data
+|-- dataset_creation
+|   |-- generate_img_dataset.py
+|   |-- generate_txt_dataset.py
+|   |-- prepare_dataset.py
+|   `-- prepare_for_gpt.py
+|-- download_dataset.py
+|-- edit_app.py
+|-- edit_cli.py
+|-- edit_dataset.py
+|-- environment.yaml
+|-- evaluate_metrics.py
+|-- fine-tune-ip2p-full.py
+|-- fine-tune-ip2p.py
+|-- imgs
+|-- inference.ipynb
+|-- ip2p-finetune-output
+|-- main.py
+|-- metrics
+|   |-- clip_similarity.py
+|   `-- compute_metrics.py
+|-- original_data
+|-- process_dataset.ipynb
+|-- prompt_app.py
+|-- requirements.txt
+|-- scripts
+|   |-- download_checkpoints.sh
+|   |-- download_data.sh
+|   `-- download_pretrained_sd.sh
+|-- stable_diffusion
+|-- structure.txt
+|-- test_dataset.json
+|-- train_dataset.json
+`-- val_dataset.json
 ```
 
 ## 🧪 Fine-Tune InstructPix2Pix Model
