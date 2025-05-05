@@ -62,6 +62,12 @@ use_cpu: false
 
 ## 🧾 Dataset Preparation
 
+### Step 0: Prepare Dataset (Example: Our dataset)
+
+```bash
+huggingface-cli login --token=<paste-your-token>
+```
+
 ### Step 1: Create a Dataset from .pkl Files
 
 Put your raw `.pkl` simulation data in the `original_data/` folder. 
