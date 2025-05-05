@@ -266,7 +266,9 @@ We evaluate the model using **SSIM (Structural Similarity Index)** and **PSNR (P
 To run the evaluation:
 
 ```bash
-python evaluate_metrics.py --test_data_dir test_dataset.json
+python evaluate_metrics.py \
+  --test_data_dir test_dataset.json \
+  --model_path "./ip2p-finetune-output"
 ```
 
 #### Visualization
