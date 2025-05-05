@@ -12,11 +12,11 @@ It is designed to work with camera-based robotic demonstrations and tasks such a
 
 - 🧠 **Fine-tuned Model**  
   The InstructPix2Pix model fine-tuned on our dataset is hosted at:  
-  👉 [https://huggingface.co/yutengz/ip2p-RoboPredict](https://huggingface.co/yutengz/ip2p-RoboPredict)
+  👉 [https://huggingface.co/yutengz/Action2Vision](https://huggingface.co/yutengz/Action2Vision)
 
 - 🚀 **Interactive Demo**  
   You can try our model directly in your browser via Hugging Face Spaces:  
-  👉 [https://huggingface.co/spaces/yutengz/ip2p-RoboPredict](https://huggingface.co/spaces/yutengz/ip2p-RoboPredict)
+  👉 [https://huggingface.co/spaces/yutengz/Action2Vision](https://huggingface.co/spaces/yutengz/Action2Vision)
 
 
 ## 📷 Example Result
